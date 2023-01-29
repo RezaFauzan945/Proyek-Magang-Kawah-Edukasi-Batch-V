@@ -25,4 +25,5 @@ public class Manager extends PanacheEntity {
         this.name = name;
     }
 
+
 }

@@ -9,9 +9,6 @@ import javax.persistence.OneToOne;
 @Entity
 public class EmployeeScore extends PanacheEntity {
 
-    @Column(name = "name")
-    String name;
-
     @Column(name = "Score")
     int score;
 
@@ -19,14 +16,6 @@ public class EmployeeScore extends PanacheEntity {
     Employee employee;
 
     //setter getter
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getScore() {
         return score;
     }
