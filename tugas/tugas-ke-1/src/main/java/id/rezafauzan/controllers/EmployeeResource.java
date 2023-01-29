@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
+import java.util.List;
 
 
 @Path("/employee")
@@ -104,6 +105,17 @@ public class EmployeeResource {
         }
     }
 
+    @GET
+    @Path("/average-score")
+    public Response getAverageEmployeeScore() {
+        List<EmployeeScore> employeeScores = EmployeeScore.listAll();
+        double sum = 0;
+        for (EmployeeScore score : employeeScores) {
+            sum += score.getScore();
+        }
+        double average = sum / employeeScores.size();
+        return Response.status(Response.Status.OK).entity(average).build();
+    }
 
 
 
