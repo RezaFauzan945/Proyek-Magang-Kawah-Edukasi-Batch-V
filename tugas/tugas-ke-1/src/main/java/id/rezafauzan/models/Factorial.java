@@ -12,7 +12,7 @@ public class Factorial extends PanacheEntity {
     int n ;
 
     @Column(name = "factorial_dari_n")
-    int factorial;
+    long factorial;
 
 
     //setter getter
@@ -24,11 +24,11 @@ public class Factorial extends PanacheEntity {
         this.n = n;
     }
 
-    public int getFactorial() {
+    public long getFactorial() {
         return factorial;
     }
 
-    public void setFactorial(int factorial) {
+    public void setFactorial(long factorial) {
         this.factorial = factorial;
     }
 

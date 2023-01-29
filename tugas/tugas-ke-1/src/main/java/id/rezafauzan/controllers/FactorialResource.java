@@ -12,9 +12,9 @@ public class FactorialResource {
 
     @GET
     @Transactional
-    public int factorial(@QueryParam("bilangan") int bilangan )
+    public long factorial(@QueryParam("bilangan") int bilangan )
     {
-        int factorial = 1;
+        long factorial = 1;
         for (int i = 1; i <= bilangan; i++) {
             factorial *= i;
         }
