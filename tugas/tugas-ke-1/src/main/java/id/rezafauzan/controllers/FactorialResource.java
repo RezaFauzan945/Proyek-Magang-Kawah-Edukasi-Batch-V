@@ -1,5 +1,7 @@
 package id.rezafauzan.controllers;
 
+import id.rezafauzan.models.Factorial;
+
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,6 +18,12 @@ public class FactorialResource {
         for (int i = 1; i <= bilangan; i++) {
             factorial *= i;
         }
+
+        Factorial fact = new Factorial();
+
+        fact.setN(bilangan);
+        fact.setFactorial(factorial);
+        Factorial.persist(fact);
 
         return factorial;
     }
