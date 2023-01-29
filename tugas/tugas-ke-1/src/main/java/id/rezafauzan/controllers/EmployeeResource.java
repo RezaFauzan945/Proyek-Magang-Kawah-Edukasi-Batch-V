@@ -23,13 +23,13 @@ public class EmployeeResource {
     @Path("/{id_manager}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<Employee> getEmployeesByManagerId(@PathParam("id_manager") long id_manager) {
+    public Response getEmployeesByManagerId(@PathParam("id_manager") long id_manager) {
         //Mengembalikan semua employee dari manager yang dipilih berdasarkan id
         Collection<Employee> employees = Employee.find("manager.id", id_manager).list();
         if (employees.isEmpty()) {
-            throw new NotFoundException("Tidak ditemukan employee dengan id_manager " + id_manager);
+            return Response.status(Response.Status.BAD_REQUEST).entity(new NotFoundException("Tidak ditemukan employee dengan id_manager " + id_manager).getMessage()).build();
         }
-        return employees;
+        return Response.ok().entity(employees).build();
     }
 
     @POST
@@ -131,8 +131,22 @@ public class EmployeeResource {
         return Response.status(Response.Status.OK).entity(average).build();
     }
 
+    @GET
+    @Path("/average-score/{id_manager}")
+    public Response getManagerEmployeesAverageScore(@PathParam("id_manager") long id_manager) {
+        //Menampilkan Rata rata dari semua nilai Score di table employeeScore
+        Collection<Employee> employees = Employee.find("manager.id", id_manager).list();
+        if (employees.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new NotFoundException("Tidak ditemukan employee dengan id_manager " + id_manager).getMessage()).build();
+        }
 
-
-
+        double sum = 0;
+        for (Employee employee : employees)
+        {
+            sum += employee.getEmployeeScore().getScore();
+        }
+        double average = sum / employees.size();
+        return Response.status(Response.Status.OK).entity(average).build();
+    }
 
 }
