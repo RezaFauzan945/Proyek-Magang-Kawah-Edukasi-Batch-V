@@ -6,6 +6,7 @@ import id.rezafauzan.models.Manager;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +18,18 @@ public class EmployeeResource {
     @GET
     public Collection<Employee> allemploye(){
         return Employee.listAll();
+    }
+
+    @Path("/{id_manager}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Employee> getEmployeesByManagerId(@PathParam("id_manager") long id_manager) {
+        //Mengembalikan semua employee dari manager yang dipilih berdasarkan id
+        Collection<Employee> employees = Employee.find("manager.id", id_manager).list();
+        if (employees.isEmpty()) {
+            throw new NotFoundException("Tidak ditemukan employee dengan id_manager " + id_manager);
+        }
+        return employees;
     }
 
     @POST
@@ -108,6 +121,7 @@ public class EmployeeResource {
     @GET
     @Path("/average-score")
     public Response getAverageEmployeeScore() {
+        //Menampilkan Rata rata dari semua nilai Score di table employeeScore
         List<EmployeeScore> employeeScores = EmployeeScore.listAll();
         double sum = 0;
         for (EmployeeScore score : employeeScores) {
