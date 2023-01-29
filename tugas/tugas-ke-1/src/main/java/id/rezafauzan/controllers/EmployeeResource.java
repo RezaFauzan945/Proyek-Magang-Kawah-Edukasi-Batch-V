@@ -22,7 +22,7 @@ public class EmployeeResource {
     @Transactional
     public Collection<Employee> tambah(Employee employee) {
 
-        //Menambahkan Data Employe dan membuat Employe Score bersamaan
+        //Menambahkan Data Employee dan membuat Employee Score bersamaan
         //EmployeScore.id = Employee.id
 
         EmployeeScore es = new EmployeeScore();
@@ -38,8 +38,8 @@ public class EmployeeResource {
     @PUT
     @Transactional
     public Response editManager(@QueryParam("id_employee") long id_employee, @QueryParam("id_manager") long id_manager) {
-        //Menambahkan Data Employe dan membuat Employe Score bersamaan
-        //EmployeScore.id = Employee.id
+        //Mengubah Data Manager pada Data Employee
+        //Misal Dari tanpa Manager Menjadi Ada , atau mengubah Manager dari employee yang dipilih berdasarkan id_employee
 
         Employee employee  = Employee.findById(id_employee);
 
@@ -71,5 +71,42 @@ public class EmployeeResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(new NotFoundException("Employee dengan ID Employee : " + id_employee + " tidak ditemukan!").getMessage()).build();
         }
     }
+
+    @Path("/score")
+    @PUT
+    @Transactional
+    public Response editScore(@QueryParam("id_employee") long id_employee,@QueryParam("score") int score) {
+        //Mengubah Data Manager pada Data Employee
+        //Misal Dari tanpa Manager Menjadi Ada , atau mengubah Manager dari employee yang dipilih berdasarkan id_employee
+
+        Employee employee  = Employee.findById(id_employee);
+
+        if(employee != null )
+        {
+            EmployeeScore employeeScore = EmployeeScore.findById(employee.getEmployeeScore().id);
+            if(employeeScore != null )
+            {
+                employeeScore.setScore(score);
+                employee.setEmployeeScore(employeeScore);
+                return Response.status(Response.Status.OK).entity("Score untuk Employee Dengan ID " + id_employee + " Telah Diupdate ke " + score).build();
+            }
+            else
+            {
+                employeeScore.id = id_employee;
+                employeeScore.setScore(0);
+                EmployeeScore.persist(employeeScore);
+                return Response.status(Response.Status.BAD_REQUEST).entity(new NotFoundException("Employee dengan ID Employee : " + id_employee + " Belum Mempunyai Data Score Dan Sekarang Telah Dibuatkan silahkan ulangi proses update score").getMessage()).build();
+            }
+        }
+        else
+        {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new NotFoundException("Employee dengan ID Employee : " + id_employee + " tidak ditemukan!").getMessage()).build();
+        }
+    }
+
+
+
+
+
 
 }
