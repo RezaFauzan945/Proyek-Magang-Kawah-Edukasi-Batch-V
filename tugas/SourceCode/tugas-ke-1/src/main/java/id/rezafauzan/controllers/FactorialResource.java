@@ -6,13 +6,14 @@ import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
 @Path("/factorial")
 public class FactorialResource {
 
     @GET
     @Transactional
-    public long factorial(@QueryParam("bilangan") int bilangan )
+    public Response factorial(@QueryParam("bilangan") int bilangan )
     {
         long factorial = 1;
         for (int i = 1; i <= bilangan; i++) {
@@ -25,7 +26,7 @@ public class FactorialResource {
         fact.setFactorial(factorial);
         Factorial.persist(fact);
 
-        return factorial;
+        return Response.status(200).entity("{ \"messages\" : \"Factorial successfully calculated\",\"nilai-n\" : " + bilangan + ", \"factorial-dari-n\" : "+ factorial +"}").build();
     }
 
 }

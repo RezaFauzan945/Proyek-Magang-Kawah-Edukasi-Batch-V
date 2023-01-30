@@ -1,26 +1,35 @@
 package id.rezafauzan.models;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
-public class Employee extends PanacheEntity {
+public class Employee extends PanacheEntityBase {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @Column(name = "name")
     String name;
 
-    @ManyToOne
-    Manager manager;
+    @Column(name = "id_manager")
+    long manager;
 
     @OneToOne
     EmployeeScore employeeScore;
 
+
     //setter getter
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -30,17 +39,17 @@ public class Employee extends PanacheEntity {
         this.name = name;
     }
 
-    @JsonbTransient
-    //BUG! tanpa JsonbTransient akan membuat proses return employee jadi error manager unserializable
-    //kekurangan pake @JsonbTransient adalah employee akan tampil tanpa data manager ditampilkan
-    public Manager getManager() {
+    public Long getManager() {
         return manager;
     }
 
-    public void setManager(Manager manager) {
+    public void setManager(Long manager) {
         this.manager = manager;
     }
 
+    @JsonbTransient
+    //BUG! tanpa JsonbTransient akan membuat proses return employee jadi error EmployeeScore unserializable
+    //kekurangan pake @JsonbTransient adalah employee akan tampil tanpa data EmployeeScore ditampilkan
     public EmployeeScore getEmployeeScore() {
         return employeeScore;
     }
